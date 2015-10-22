@@ -60,7 +60,7 @@ class LearningSwitch13 < Trema::Controller
       datapath_id,
       table_id: INGRESS_FILTERING_TABLE_ID,
       idle_timeout: 0,
-      priority: 2,
+      priority: 1,
       match: Match.new,
       instructions: GotoTable.new(FORWARDING_TABLE_ID)
     )
