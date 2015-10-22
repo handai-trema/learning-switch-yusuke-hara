@@ -6,7 +6,7 @@ class LearningSwitch < Trema::Controller
 
   def start(_argv)
     @fdb = FDB.new
-    logger.info 'LearningSwitch started.'
+    logger.info "#{name} started."
   end
 
   def packet_in(_datapath_id, message)

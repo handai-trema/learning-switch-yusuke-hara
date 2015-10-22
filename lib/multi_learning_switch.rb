@@ -8,7 +8,7 @@ class MultiLearningSwitch < Trema::Controller
 
   def start(_argv)
     @fdbs = {}
-    logger.info 'MultiLearningSwitch started.'
+    logger.info "#{name} started."
   end
 
   def switch_ready(datapath_id)

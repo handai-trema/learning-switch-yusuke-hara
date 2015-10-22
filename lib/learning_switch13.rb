@@ -6,7 +6,7 @@ class LearningSwitch13 < Trema::Controller
   AGING_TIME = 180
 
   def start(_args)
-    logger.info 'LearningSwitch started.'
+    logger.info "#{name} started."
   end
 
   def switch_ready(datapath_id)
