@@ -1,6 +1,7 @@
 Feature: Learning Switch example (OpenFlow1.3 support).
   Background:
-    Given a file named "trema.conf" with:
+    Given I use OpenFlow 1.3
+    And a file named "trema.conf" with:
       """
       vswitch('learning') { datapath_id 0xabc }
 
@@ -11,9 +12,9 @@ Feature: Learning Switch example (OpenFlow1.3 support).
       link 'learning', 'host2'
       """
 
-  @sudo
+  @sudo @openflow13
   Scenario: Run
-    Given I run `trema run ../../lib/learning_switch13.rb -c trema.conf --openflow13` interactively
+    Given I trema run "lib/learning_switch13.rb" interactively with the configuration "trema.conf"
     And I run `sleep 8`
     When I run `trema send_packets --source host1 --dest host2`
     And I run `trema send_packets --source host2 --dest host1 --npackets 2`
@@ -26,7 +27,7 @@ Feature: Learning Switch example (OpenFlow1.3 support).
 
   @sudo
   Scenario: Run as a daemon
-    Given I successfully run `trema run ../../lib/learning_switch13.rb -c trema.conf --openflow13 -d`
+    Given I trema run "lib/learning_switch13.rb" with the configuration "trema.conf"
     And I run `sleep 8`
     When I successfully run `trema send_packets --source host1 --dest host2`
     And I successfully run `trema send_packets --source host2 --dest host1 --npackets 2`

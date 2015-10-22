@@ -18,7 +18,7 @@ Feature: "Multi Learning Switch" example
 
   @sudo
   Scenario: Run
-    Given I run `trema run ../../lib/multi_learning_switch.rb -c trema.conf` interactively
+    Given I trema run "lib/multi_learning_switch.rb" interactively with the configuration "trema.conf"
     And I run `sleep 10`
     When I run `trema send_packets --source host1-1 --dest host1-2 --npackets 2`
     Then the total number of received packets should be:
@@ -43,7 +43,7 @@ Feature: "Multi Learning Switch" example
 
   @sudo
   Scenario: Run as a daemon
-    Given I successfully run `trema run ../../lib/multi_learning_switch.rb -c trema.conf -d`
+    Given I trema run "lib/multi_learning_switch.rb" with the configuration "trema.conf"
     And I run `sleep 10`
     When I successfully run `trema send_packets --source host1-1 --dest host1-2 --npackets 2`
     Then the total number of received packets should be:
