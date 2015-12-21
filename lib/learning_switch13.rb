@@ -22,9 +22,9 @@ class LearningSwitch13 < Trema::Controller
     add_default_forwarding_flow_entry(datapath_id)
   end
 
-  def packet_in(_datapath_id, message)
-    @fdb.learn(message.source_mac, message.in_port)
-    add_forwarding_flow_and_packet_out(message)
+  def packet_in(_datapath_id, packet_in)
+    @fdb.learn(packet_in.source_mac, packet_in.in_port)
+    add_forwarding_flow_and_packet_out(packet_in)
   end
 
   def age_fdb
@@ -33,29 +33,29 @@ class LearningSwitch13 < Trema::Controller
 
   private
 
-  def add_forwarding_flow_and_packet_out(message)
-    port_no = @fdb.lookup(message.destination_mac)
-    add_forwarding_flow_entry(message, port_no) if port_no
-    packet_out(message, port_no || :flood)
+  def add_forwarding_flow_and_packet_out(packet_in)
+    port_no = @fdb.lookup(packet_in.destination_mac)
+    add_forwarding_flow_entry(packet_in, port_no) if port_no
+    packet_out(packet_in, port_no || :flood)
   end
 
-  def add_forwarding_flow_entry(message, port_no)
+  def add_forwarding_flow_entry(packet_in, port_no)
     send_flow_mod_add(
-      message.datapath_id,
+      packet_in.datapath_id,
       table_id: FORWARDING_TABLE_ID,
       idle_timeout: AGING_TIME,
       priority: 2,
-      match: Match.new(in_port: message.in_port,
-                       destination_mac_address: message.destination_mac,
-                       source_mac_address: message.source_mac),
+      match: Match.new(in_port: packet_in.in_port,
+                       destination_mac_address: packet_in.destination_mac,
+                       source_mac_address: packet_in.source_mac),
       instructions: Apply.new(SendOutPort.new(port_no))
     )
   end
 
-  def packet_out(message, port_no)
+  def packet_out(packet_in, port_no)
     send_packet_out(
-      message.datapath_id,
-      packet_in: message,
+      packet_in.datapath_id,
+      packet_in: packet_in,
       actions: SendOutPort.new(port_no)
     )
   end
