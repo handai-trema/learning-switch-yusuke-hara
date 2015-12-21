@@ -1,5 +1,3 @@
-$LOAD_PATH.unshift __dir__
-
 require 'fdb'
 
 # An OpenFlow controller that emulates multiple layer-2 switches.

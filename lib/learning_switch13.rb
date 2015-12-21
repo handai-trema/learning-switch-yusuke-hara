@@ -46,8 +46,8 @@ class LearningSwitch13 < Trema::Controller
       idle_timeout: AGING_TIME,
       priority: 2,
       match: Match.new(in_port: message.in_port,
-                       ether_destination_address: message.destination_mac,
-                       ether_source_address: message.source_mac),
+                       destination_mac_address: message.destination_mac,
+                       source_mac_address: message.source_mac),
       instructions: Apply.new(SendOutPort.new(port_no))
     )
   end
@@ -66,7 +66,7 @@ class LearningSwitch13 < Trema::Controller
       table_id: FORWARDING_TABLE_ID,
       idle_timeout: 0,
       priority: 3,
-      match: Match.new(ether_destination_address: 'ff:ff:ff:ff:ff:ff'),
+      match: Match.new(destination_mac_address: 'ff:ff:ff:ff:ff:ff'),
       instructions: Apply.new(SendOutPort.new(:flood))
     )
   end
@@ -88,8 +88,8 @@ class LearningSwitch13 < Trema::Controller
       table_id: INGRESS_FILTERING_TABLE_ID,
       idle_timeout: 0,
       priority: 2,
-      match: Match.new(ether_destination_address: '01:00:00:00:00:00',
-                       ether_destination_address_mask: 'ff:00:00:00:00:00')
+      match: Match.new(destination_mac_address: '01:00:00:00:00:00',
+                       destination_mac_address_mask: 'ff:00:00:00:00:00')
     )
   end
 
@@ -99,8 +99,8 @@ class LearningSwitch13 < Trema::Controller
       table_id: INGRESS_FILTERING_TABLE_ID,
       idle_timeout: 0,
       priority: 2,
-      match: Match.new(ether_destination_address: '33:33:00:00:00:00',
-                       ether_destination_address_mask: 'ff:ff:00:00:00:00')
+      match: Match.new(destination_mac_address: '33:33:00:00:00:00',
+                       destination_mac_address_mask: 'ff:ff:00:00:00:00')
     )
   end
 
