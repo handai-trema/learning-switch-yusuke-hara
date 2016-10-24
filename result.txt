@@ -1,0 +1,33 @@
+$ ./bin/trema dump_flows lsw
+cookie=0x0, duration=16.339s, table=0, n_packets=0, n_bytes=0, priority=2,dl_dst=01:00:00:00:00:00/ff:00:00:00:00:00 actions=drop
+cookie=0x0, duration=16.301s, table=0, n_packets=0, n_bytes=0, priority=2,dl_dst=33:33:00:00:00:00/ff:ff:00:00:00:00 actions=drop
+cookie=0x0, duration=16.301s, table=0, n_packets=0, n_bytes=0, priority=1 actions=goto_table:1
+cookie=0x0, duration=16.301s, table=1, n_packets=0, n_bytes=0, priority=3,dl_dst=ff:ff:ff:ff:ff:ff actions=FLOOD
+cookie=0x0, duration=16.301s, table=1, n_packets=0, n_bytes=0, priority=1 actions=CONTROLLER:65535
+
+$ ./bin/trema send_packets --source host1 --dest host2
+$ ./bin/trema dump_flows lsw
+cookie=0x0, duration=24.413s, table=0, n_packets=0, n_bytes=0, priority=2,dl_dst=01:00:00:00:00:00/ff:00:00:00:00:00 actions=drop
+cookie=0x0, duration=24.375s, table=0, n_packets=0, n_bytes=0, priority=2,dl_dst=33:33:00:00:00:00/ff:ff:00:00:00:00 actions=drop
+cookie=0x0, duration=24.375s, table=0, n_packets=1, n_bytes=42, priority=1 actions=goto_table:1
+cookie=0x0, duration=24.375s, table=1, n_packets=0, n_bytes=0, priority=3,dl_dst=ff:ff:ff:ff:ff:ff actions=FLOOD
+cookie=0x0, duration=24.375s, table=1, n_packets=1, n_bytes=42, priority=1 actions=CONTROLLER:65535
+
+$ ./bin/trema send_packets --source host2 --dest host1
+$ ./bin/trema dump_flows lsw
+cookie=0x0, duration=48.663s, table=0, n_packets=0, n_bytes=0, priority=2,dl_dst=01:00:00:00:00:00/ff:00:00:00:00:00 actions=drop
+cookie=0x0, duration=48.625s, table=0, n_packets=0, n_bytes=0, priority=2,dl_dst=33:33:00:00:00:00/ff:ff:00:00:00:00 actions=drop
+cookie=0x0, duration=48.625s, table=0, n_packets=2, n_bytes=84, priority=1 actions=goto_table:1
+cookie=0x0, duration=48.625s, table=1, n_packets=0, n_bytes=0, priority=3,dl_dst=ff:ff:ff:ff:ff:ff actions=FLOOD
+cookie=0x0, duration=17.695s, table=1, n_packets=0, n_bytes=0, idle_timeout=180, priority=2,in_port=2,dl_src=9a:86:02:b3:f1:f8,dl_dst=75:79:21:80:5f:2e actions=output:1
+cookie=0x0, duration=48.625s, table=1, n_packets=2, n_bytes=84, priority=1 actions=CONTROLLER:65535
+
+$ ./bin/trema send_packets --source host1 --dest host2
+$ ./bin/trema dump_flows lsw
+cookie=0x0, duration=60.727s, table=0, n_packets=0, n_bytes=0, priority=2,dl_dst=01:00:00:00:00:00/ff:00:00:00:00:00 actions=drop
+cookie=0x0, duration=60.689s, table=0, n_packets=0, n_bytes=0, priority=2,dl_dst=33:33:00:00:00:00/ff:ff:00:00:00:00 actions=drop
+cookie=0x0, duration=60.689s, table=0, n_packets=3, n_bytes=126, priority=1 actions=goto_table:1
+cookie=0x0, duration=60.689s, table=1, n_packets=0, n_bytes=0, priority=3,dl_dst=ff:ff:ff:ff:ff:ff actions=FLOOD
+cookie=0x0, duration=3.609s, table=1, n_packets=0, n_bytes=0, idle_timeout=180, priority=2,in_port=1,dl_src=75:79:21:80:5f:2e,dl_dst=9a:86:02:b3:f1:f8 actions=output:2
+cookie=0x0, duration=29.759s, table=1, n_packets=0, n_bytes=0, idle_timeout=180, priority=2,in_port=2,dl_src=9a:86:02:b3:f1:f8,dl_dst=75:79:21:80:5f:2e actions=output:1
+cookie=0x0, duration=60.689s, table=1, n_packets=3, n_bytes=126, priority=1 actions=CONTROLLER:65535
