@@ -1,0 +1,27 @@
+$ sudo ovs-ofctl dump-flows brlsw --protocol=OpenFlow13
+OFPST_FLOW reply (OF1.3) (xid=0x2):
+ cookie=0x0, duration=25.134s, table=0, n_packets=0, n_bytes=0, priority=2,dl_dst=01:00:5e:00:00:00/ff:ff:ff:00:00:00 actions=drop
+ cookie=0x0, duration=25.095s, table=0, n_packets=0, n_bytes=0, priority=2 actions=goto_table:1
+ cookie=0x0, duration=25.095s, table=1, n_packets=0, n_bytes=0, priority=1 actions=CONTROLLER:65535,FLOOD
+$ ./bin/trema send_packets --source host1 --dest host2
+$ sudo ovs-ofctl dump-flows brlsw --protocol=OpenFlow13
+OFPST_FLOW reply (OF1.3) (xid=0x2):
+ cookie=0x0, duration=88.121s, table=0, n_packets=0, n_bytes=0, priority=2,dl_dst=01:00:5e:00:00:00/ff:ff:ff:00:00:00 actions=drop
+ cookie=0x0, duration=88.082s, table=0, n_packets=1, n_bytes=42, priority=2 actions=goto_table:1
+ cookie=0x0, duration=3.464s, table=1, n_packets=0, n_bytes=0, idle_timeout=180, priority=2,dl_dst=99:3d:bb:6c:00:fb actions=output:1
+ cookie=0x0, duration=88.082s, table=1, n_packets=1, n_bytes=42, priority=1 actions=CONTROLLER:65535,FLOOD
+$ ./bin/trema send_packets --source host2 --dest host1
+$ sudo ovs-ofctl dump-flows brlsw --protocol=OpenFlow13
+OFPST_FLOW reply (OF1.3) (xid=0x2):
+ cookie=0x0, duration=98.248s, table=0, n_packets=0, n_bytes=0, priority=2,dl_dst=01:00:5e:00:00:00/ff:ff:ff:00:00:00 actions=drop
+ cookie=0x0, duration=98.209s, table=0, n_packets=2, n_bytes=84, priority=2 actions=goto_table:1
+ cookie=0x0, duration=13.591s, table=1, n_packets=1, n_bytes=42, idle_timeout=180, priority=2,dl_dst=99:3d:bb:6c:00:fb actions=output:1
+ cookie=0x0, duration=98.209s, table=1, n_packets=1, n_bytes=42, priority=1 actions=CONTROLLER:65535,FLOOD
+$ ./bin/trema send_packets --source host1 --dest host2
+$ sudo ovs-ofctl dump-flows brlsw --protocol=OpenFlow13
+OFPST_FLOW reply (OF1.3) (xid=0x2):
+ cookie=0x0, duration=109.593s, table=0, n_packets=0, n_bytes=0, priority=2,dl_dst=01:00:5e:00:00:00/ff:ff:ff:00:00:00 actions=drop
+ cookie=0x0, duration=109.554s, table=0, n_packets=3, n_bytes=126, priority=2 actions=goto_table:1
+ cookie=0x0, duration=2.139s, table=1, n_packets=1, n_bytes=42, idle_timeout=180, priority=2,dl_dst=99:3d:bb:6c:00:fb actions=output:1
+ cookie=0x0, duration=109.554s, table=1, n_packets=2, n_bytes=84, priority=1 actions=CONTROLLER:65535,FLOOD
+$
